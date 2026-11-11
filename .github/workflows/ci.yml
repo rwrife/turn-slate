@@ -1,0 +1,75 @@
+name: Validate
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: '3.47.7'
+          cache: true
+      - run: flutter --version
+      - run: flutter pub get --enforce-lockfile
+      - run: dart format --output=none --set-exit-if-changed lib test
+      - run: flutter analyze
+      - run: flutter test
+      - run: flutter build windows --release
+      - name: Check Windows executable
+        shell: pwsh
+        run: |
+          $exe = 'build/windows/x64/runner/Release/turn_slate.exe'
+          if (-not (Test-Path $exe)) { throw "Windows executable missing: $exe" }
+          if ((Get-Item $exe).Length -le 0) { throw "Windows executable empty: $exe" }
+
+  android:
+    runs-on: ubuntu-latest
+    container:
+      image: gmeligio/flutter-android:3.47.7
+      options: --user 1001
+    env:
+      HOME: /home/flutter
+      PUB_CACHE: /home/flutter/.pub-cache
+      FLUTTER_ROOT: /home/flutter/sdks/flutter
+      PATH: /home/flutter/sdks/flutter/bin:/home/flutter/sdks/flutter/bin/cache/dart-sdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      ANDROID_HOME: /home/flutter/sdks/android-sdk
+      JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - run: flutter --version
+      - run: flutter pub get --enforce-lockfile
+      - run: flutter test
+      - run: flutter build apk --debug
+      - name: Check Android application ID and APK
+        run: |
+          test -s build/app/outputs/flutter-apk/app-debug.apk
+          test -f android/app/src/main/kotlin/com/infinityball/turnslate/MainActivity.kt
+          grep -q 'applicationId = "com.infinityball.turnslate"' android/app/build.gradle.kts
+
+  ios:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: '3.47.7'
+          cache: true
+      - run: flutter --version
+      - run: flutter pub get --enforce-lockfile
+      - run: flutter build ios --simulator --no-codesign
+      - name: Check iPhone and iPad bundle settings
+        run: |
+          test "$(grep -c 'PRODUCT_BUNDLE_IDENTIFIER = com.infinityball.turnslate;' ios/Runner.xcodeproj/project.pbxproj)" -eq 3
+          test "$(grep -c 'TARGETED_DEVICE_FAMILY = "1,2";' ios/Runner.xcodeproj/project.pbxproj)" -eq 3

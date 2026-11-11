@@ -1,4 +1,4 @@
-package com.infinityball.turn_slate
+package com.infinityball.turnslate
 
 import io.flutter.embedding.android.FlutterActivity
 
