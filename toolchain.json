@@ -1,0 +1,10 @@
+{
+  "platform": "windows+android+ios+flutter",
+  "flutter_version": "3.47.7",
+  "bundle_identifier": "com.infinityball.turnslate",
+  "android_application_id": "com.infinityball.turnslate",
+  "ios_bundle_identifier": "com.infinityball.turnslate",
+  "ios_tablet_support": true,
+  "windows_primary_release": true,
+  "ux_strategy": "custom-branded"
+}

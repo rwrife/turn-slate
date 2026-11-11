@@ -1,0 +1,3 @@
+Turn Slate is planned as an offline encounter board for in-person tabletop game masters. Set a participant order, track turns and rounds, mark timed conditions, and keep resource counters visible. Designed for a focused phone view, a roomier tablet roster and a resizable Windows board, with touch and keyboard controls. Planned backup and export let you keep your session records. No account or cloud sync required.
+
+Pre-release description: encounter workflow, local saves, backup, and platform-specific controls are still in development. No combat rules or character-sheet automation.
