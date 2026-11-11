@@ -17,7 +17,7 @@ Phone: focused current-turn card and next controls. Tablet: participant rail plu
 
 ## Status and milestones
 
-**Early Flutter scaffold only.** Generated Windows, Android, and iOS folders and framework counter demo exist; encounter tracking does not yet work. Planned slices: encounter domain and persistence, turn/condition workflow, adaptive accessible UI, backup, CI, Windows release. `AppStore/description.txt` is pre-release copy. Icon generation and resource wiring status documented below; starter app icons must not be used for release.
+**Early Flutter scaffold only.** Generated Windows, Android, and iOS folders exist; placeholder screen does not track encounters yet. `.github/workflows/ci.yml` gates Flutter 3.47.7 on Windows (including release build), Android (debug APK), and iOS (simulator compile). Widget smoke tests cover iOS, Android, Windows at phone, tablet, and desktop widths. `AppStore/description.txt` remains pre-release copy. Icon resources require release review; encounter logic, saves, adaptive board, backup and Windows packaging remain backlog work.
 
 ## Platforms and design
 
@@ -35,7 +35,7 @@ Encounter data stays on device; no account, ads, analytics, tracking, network sy
 
 ## Quickstart
 
-Pinned Flutter version in `toolchain.json`; from repository root run `flutter pub get && flutter test && flutter run -d windows` on Windows with Visual Studio C++ desktop tooling. Linux host can run `flutter test` inside pinned Flutter Docker image. Starter test validates generated counter, not encounter functionality. Windows build/release Action is backlog work, not yet shipped.
+Pinned Flutter version in `toolchain.json`; from repository root run `flutter pub get --enforce-lockfile && flutter analyze && flutter test && flutter run -d windows` on Windows with Visual Studio C++ desktop tooling. Linux host can run Flutter tests with pinned 3.47.7 SDK. CI verifies native Windows release build, Android debug APK and unsigned iOS simulator compile; downloadable Windows release packaging is separate backlog work.
 
 ## Manual setup required
 
